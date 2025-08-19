@@ -154,8 +154,10 @@ function updateInvoiceSummary() {
   const totals = [...document.querySelectorAll("#invoiceItems .total")];
   if (!totals.length) return;
   const sum = totals.reduce((s, td) => s + (parseFloat(td.innerText) || 0), 0);
-  const vat = sum * 0.15;
-  const total = sum + vat;
+  // const vat = sum * 0.15
+  // const total = sum + vat;
+  const vat = 0;
+  const total = sum;
 
   const subEl = document.getElementById("invoiceSubtotal");
   const vatEl = document.getElementById("invoiceVat");
@@ -221,7 +223,7 @@ function loadInvoiceHistory() {
       <p><strong>PO:</strong> ${inv.po}</p>
       <p><strong>Ref:</strong> ${inv.ref}</p>
       <p><strong>Total:</strong> R${inv.total}</p>
-      <button onclick='viewInvoice(${JSON.stringify(inv)})'>👁️ View Details</button>
+      <button onclick='viewInvoice(${JSON.stringify(inv)})'>View Details</button>
       <button onclick='downloadPDF("Invoice", "invoiceItems", {
         "Number": "${inv.number}",
         "Date": "${inv.date}",
@@ -230,7 +232,7 @@ function loadInvoiceHistory() {
         "Subtotal": "R${inv.subtotal}",
         "VAT": "R${inv.vat}",
         "Total": "R${inv.total}"
-      })'>💾 Download PDF</button>
+      })'>Download PDF</button>
     `;
     container.appendChild(card);
   });
@@ -287,8 +289,10 @@ function updateQuoteSummary() {
   const totals = [...document.querySelectorAll("#quoteItems .total")];
   if (!totals.length) return;
   const sum = totals.reduce((s, td) => s + (parseFloat(td.innerText) || 0), 0);
-  const vat = sum * 0.15;
-  const total = sum + vat;
+  // const vat = sum * 0.15;
+  // const total = sum + vat;
+  const vat = 0;
+  const total = sum;
 
   const subEl = document.getElementById("quoteSubtotal");
   const vatEl = document.getElementById("quoteVat");
@@ -367,7 +371,7 @@ function loadQuoteHistory() {
         "Subtotal": "R${q.subtotal}",
         "VAT": "R${q.vat}",
         "Total": "R${q.total}"
-      })'>💾 Download PDF</button>
+      })'> Download PDF</button>
     `;
     container.appendChild(card);
   });
