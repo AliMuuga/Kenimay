@@ -168,3 +168,18 @@ button:hover {
     font-size: 10pt;
   }
 }
+@media print {
+  /* Hide Invoice History */
+  #invoiceHistory,
+  #invoiceHistory * {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Hide Quotation History */
+  #quoteHistory,
+  #quoteHistory * {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
