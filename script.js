@@ -83,6 +83,34 @@ const nextInvoiceNo = () => `INV#${pad3(invoiceCounter)}`;
 const nextQuoteNo   = () => `QUO#${pad4(quoteCounter)}`;
 
 // ===============================
+// PDF Export Utility
+// ===============================
+function downloadPDF(title, itemsTableId, summary = {}) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text(title, 20, 20);
+
+  // Add summary if provided
+  let y = 30;
+  for (const key in summary) {
+    doc.setFontSize(12);
+    doc.text(`${key}: ${summary[key]}`, 20, y);
+    y += 10;
+  }
+
+  // Add table content
+  const table = document.getElementById(itemsTableId);
+  if (table) {
+    doc.autoTable({ html: `#${itemsTableId}`, startY: y });
+  }
+
+  const filename = summary.Number || title.replace(/\s+/g, "_");
+  doc.save(`${filename}.pdf`);
+}
+
+// ===============================
 // INVOICES
 // ===============================
 function initInvoicePage() {
@@ -194,6 +222,15 @@ function loadInvoiceHistory() {
       <p><strong>Ref:</strong> ${inv.ref}</p>
       <p><strong>Total:</strong> R${inv.total}</p>
       <button onclick='viewInvoice(${JSON.stringify(inv)})'>👁️ View Details</button>
+      <button onclick='downloadPDF("Invoice", "invoiceItems", {
+        "Number": "${inv.number}",
+        "Date": "${inv.date}",
+        "PO": "${inv.po}",
+        "Ref": "${inv.ref}",
+        "Subtotal": "R${inv.subtotal}",
+        "VAT": "R${inv.vat}",
+        "Total": "R${inv.total}"
+      })'>💾 Download PDF</button>
     `;
     container.appendChild(card);
   });
@@ -321,6 +358,16 @@ function loadQuoteHistory() {
       <p><strong>Contact:</strong> ${q.contact}</p>
       <p><strong>Total:</strong> R${q.total}</p>
       <button onclick='viewQuote(${JSON.stringify(q)})'> View Details</button>
+      <button onclick='downloadPDF("Quote", "quoteItems", {
+        "Number": "${q.number}",
+        "Date": "${q.date}",
+        "Customer": "${q.customer}",
+        "Contact": "${q.contact}",
+        "Ref": "${q.ref}",
+        "Subtotal": "R${q.subtotal}",
+        "VAT": "R${q.vat}",
+        "Total": "R${q.total}"
+      })'>💾 Download PDF</button>
     `;
     container.appendChild(card);
   });
@@ -343,6 +390,7 @@ window.saveInvoice        = saveInvoice;
 window.addQuoteItem       = addQuoteItem;
 window.updateQuoteTotal   = updateQuoteTotal;
 window.saveQuote          = saveQuote;
+window.downloadPDF        = downloadPDF;
 
 // ===============================
 // Boot
