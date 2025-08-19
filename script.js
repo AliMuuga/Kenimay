@@ -28,42 +28,51 @@ function getNextNumber(type) {
 function calculatePayslip(payslip) {
   let gross = 0;
 
-  // Income rows (Normal, Overtime, Extra OT, Call Out)
-  const rows = payslip.querySelectorAll("table:nth-of-type(2) tr");
-  rows.forEach((row, index) => {
-    if (index > 0 && index < 5) { // first 4 rows are time-based
-      const hours = parseFloat(row.querySelector(".hours").value) || 0;
-      const rate = parseFloat(row.querySelector(".rate").value) || 0;
-      const amount = hours * rate;
-      row.querySelector(".amount").textContent = amount.toFixed(2);
-      gross += amount;
+  // Calculate all rows with hours * rate
+  const rows = payslip.querySelectorAll("tr");
+  rows.forEach(row => {
+    const hoursInput = row.querySelector(".hours");
+    const rateInput = row.querySelector(".rate");
+    const amountCell = row.querySelector(".amount");
+
+    if (hoursInput && rateInput && amountCell) {
+      const hours = parseFloat(hoursInput.value) || 0;
+      const rate = parseFloat(rateInput.value) || 0;
+      const total = hours * rate;
+      amountCell.textContent = total.toFixed(2);
+      gross += total;
     }
   });
 
-  // Bonus
-  const bonus = parseFloat(payslip.querySelector(".bonus").value) || 0;
-  payslip.querySelector(".bonus-amount").textContent = bonus.toFixed(2);
-  gross += bonus;
+  // Add Bonus
+  const bonusInput = payslip.querySelector(".bonus");
+  const bonusCell = payslip.querySelector(".bonus-amount");
+  if (bonusInput && bonusCell) {
+    const bonus = parseFloat(bonusInput.value) || 0;
+    bonusCell.textContent = bonus.toFixed(2);
+    gross += bonus;
+  }
 
-  // Gross Earnings
-  payslip.querySelector(".gross").textContent = gross.toFixed(2);
+  // Update Gross Earnings
+  const grossCell = payslip.querySelector(".gross");
+  if (grossCell) grossCell.textContent = gross.toFixed(2);
 
-  // Deductions
+  // Calculate Deductions
   let deductions = 0;
-  payslip.querySelectorAll(".deduction").forEach(ded => {
-    deductions += parseFloat(ded.value) || 0;
+  payslip.querySelectorAll(".deduction").forEach(input => {
+    deductions += parseFloat(input.value) || 0;
   });
-  payslip.querySelector(".deductions-total").textContent = deductions.toFixed(2);
+  const deductionsCell = payslip.querySelector(".deductions-total");
+  if (deductionsCell) deductionsCell.textContent = deductions.toFixed(2);
 
-  // Net Pay
-  payslip.querySelector(".net-pay").textContent = (gross - deductions).toFixed(2);
+  // Net Pay = Gross - Deductions
+  const netPayCell = payslip.querySelector(".net-pay");
+  if (netPayCell) netPayCell.textContent = (gross - deductions).toFixed(2);
 }
 
 // Apply auto-calculation to ALL payslips
-document.querySelectorAll(".payslip").forEach(payslip => {
-  payslip.querySelectorAll("input").forEach(input => {
-    input.addEventListener("input", () => calculatePayslip(payslip));
-  });
+document.addEventListener("input", () => {
+  document.querySelectorAll(".payslip").forEach(payslip => calculatePayslip(payslip));
 });
 
 // ===============================
@@ -154,8 +163,6 @@ function updateInvoiceSummary() {
   const totals = [...document.querySelectorAll("#invoiceItems .total")];
   if (!totals.length) return;
   const sum = totals.reduce((s, td) => s + (parseFloat(td.innerText) || 0), 0);
-  // const vat = sum * 0.15
-  // const total = sum + vat;
   const vat = 0;
   const total = sum;
 
@@ -289,8 +296,6 @@ function updateQuoteSummary() {
   const totals = [...document.querySelectorAll("#quoteItems .total")];
   if (!totals.length) return;
   const sum = totals.reduce((s, td) => s + (parseFloat(td.innerText) || 0), 0);
-  // const vat = sum * 0.15;
-  // const total = sum + vat;
   const vat = 0;
   const total = sum;
 
