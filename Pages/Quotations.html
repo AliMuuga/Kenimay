@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Payslip - Kenimay Engineering</title>
+  <link rel="icon" href="../Assets/Logo.png" type="image/png">
+  <link rel="stylesheet" href="../CSS/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <img src="../Assets/Logo.png" alt="Company Logo">
+    </div>
+    <div class="company-info">
+      <h1>KENIMAY ENGINEERING PTY LTD</h1>
+      <p>UNIT 13, 40 PLANTATION ROAD, EDENVALE</p>
+      <p>Email: kenimayengineering60@gmail.com | Cell: 072 796 9703</p>
+    </div>
+  </header>
+
+  <nav>
+    <button onclick="location.href='../index.html'">Home</button>
+    <button onclick="location.href='../Pages/Invoices.html'">Invoices</button>
+    <button onclick="location.href='../Pages/Payslips.html'">Payslips</button>
+  </div>
+  </nav>
+  <!-- ====== NEW QUOTE ====== -->
+  <section id="newQuote">
+    <h2>Quotation</h2>
+    <label>Date: <input type="date" id="quoteDate"></label><br>
+    <label>Quote No: <input type="text" id="quoteNo" readonly></label><br>
+    <label>Customer: <input type="text" id="customerName"></label><br>
+    <label>Contact Person: <input type="text" id="contactPerson"></label><br>
+    <label>Ref No: <input type="text" id="refNo"></label><br>
+
+    <h3>Items</h3>
+    <table id="quoteItems">
+      <thead>
+        <tr><th>Qty</th><th>Description</th><th>Unit Price (R)</th><th>Total (R)</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button onclick="addQuoteItem()">+ Add Item</button>
+
+    <h3>Subtotal: R<span id="quoteSubtotal">0.00</span></h3>
+    <h3>VAT (15%): R<span id="quoteVat">0.00</span></h3>
+    <h3><strong>Total: R<span id="quoteTotal">0.00</span></strong></h3>
+
+    <button onclick="saveQuote()">Save Quote</button>
+    <button onclick="window.print()">Print</button>
+  </section>
+
+  <!-- ====== QUOTATION HISTORY ====== -->
+  <section id="quoteHistory">
+    <h2>Quotation History</h2>
+    <div id="quoteHistoryList"></div>
+  </section>
+
+<script src="../Script/script.js"></script>
+</body>
+</html>
